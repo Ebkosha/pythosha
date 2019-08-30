@@ -2,11 +2,13 @@ from robodk import*
 from robolink import*
 RDK = Robolink()
 
-program = RDK.AddProgram('AutoProgram')
+program = RDK.AddProgram('shift')
 
 program.setDO(2, 1)
 pause(1)
 program.setDO(1, 0)
 pause(1)
 
-RDK.RunCode('AutoProgram')
+RDK.RunCode('shift')
+
+program.Delete()
