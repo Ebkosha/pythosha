@@ -11,4 +11,6 @@ pause(1)
 
 RDK.RunCode('shift', True)
 
+pause(3)
+
 program.Delete()
