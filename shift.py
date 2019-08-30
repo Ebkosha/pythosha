@@ -9,7 +9,7 @@ pause(1)
 program.setDO(1, 0)
 pause(1)
 
-RDK.RunCode('shift', True)
+RDK.RunCode("shift", True)
 
 pause(3)
 
