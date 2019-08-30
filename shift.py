@@ -9,6 +9,6 @@ pause(1)
 program.setDO(1, 0)
 pause(1)
 
-RDK.RunCode('shift')
+RDK.RunCode('shift', True)
 
 program.Delete()
