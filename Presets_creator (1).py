@@ -4,9 +4,10 @@ import numpy as np
 import math
 from tkinter import *
 from tkinter import filedialog as fd
+import requests
 
-wind1 = "clrsi"
-wind2 = "size"
+wind1 = "c"
+wind2 = "s"
 cv2.namedWindow( wind1 )
 cv2.namedWindow( wind2 )
 
@@ -36,7 +37,8 @@ cv2.createTrackbar('Z', wind2, 0, 500, nothing)
 cv2.createTrackbar('vac', wind2, 0, 1, nothing)
 crange = [0,0,0, 0,0,0]
 
-while True:
+while True:	
+
 	frame, img = cap.read()
 	# преобразуем RGB картинку в HSV модель
 	hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV )
@@ -62,7 +64,7 @@ while True:
 		quit()
 	elif cv2.waitKey(10) & 0xFF == ord('s'):
 		file_name = fd.asksaveasfilename(filetypes=(("Python file", "*.py"),
-                                   ("All files", "*.*") ))+".py"
+								   ("All files", "*.*") ))+".py"
 		try:
 			f = open(file_name, 'w', encoding='utf8')
 			s = """import cv2
@@ -115,6 +117,8 @@ max_width = %s
 
 vac=%s
 
+Zpos=%s
+
 # применяем цветовой фильтр
 thresh = cv2.inRange(hsv, (h1, s1, v1), (h2, s2, v2))
 moments = cv2.moments(thresh, 1)  
@@ -125,7 +129,7 @@ h_max = np.array((h2, s2, v2), np.uint8)
 contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE) #Нахождение контуров
 
 for cnt in contours:
-	
+	i+1
 	x1, y1, w1, h1 = cv2.boundingRect(cnt) #получение первых точек
 	Areab = cv2.contourArea(cnt)
 
@@ -147,7 +151,7 @@ for cnt in contours:
 				rX=(cX-320)*sm*10
 				print(rX)
 				print("Left")
-
+			cX=cX+150 #смещение камеры
 			rect = cv2.minAreaRect(cnt) # пытаемся вписать прямоугольник
 			box = cv2.boxPoints(rect) # поиск четырех вершин прямоугольника
 			box = np.int0(box) # округление координат
@@ -172,9 +176,8 @@ for cnt in contours:
 			x=cY 
 			
 			#x *= -1
-			z = 400
+			z = 500
 			#z *= -1
-			z2 = 300
 
 			print(y,x)
 			target = RDK.AddTarget("T1")
@@ -195,9 +198,10 @@ for cnt in contours:
 			robot.MoveJ(joints)  # вращение фланса
 			r = requests.get("http://192.168.20.143:5001").text
 			try:
-				exec(r)
+				exec(r) #присвоение Z координаты
 			except:
 				pass
+			z=Zpos
 			t1 = RDK.AddTarget("t1")
 			fz = t1.Pose()
 			print(fz)
@@ -209,8 +213,8 @@ for cnt in contours:
 			target.setPose(KUKA_2_Pose([x, y, z, 130.560, -45.890, 180.000]))
 			t1.Delete()
 			target.Delete()
-			quit()
-"""%(h1, s1, v1, h2, s2, v2, noise, min_height, min_width, max_height, max_width, vac) #КОД СЮДА СТАВИТБ
+
+"""%(h1, s1, v1, h2, s2, v2, noise, min_height, min_width, max_height, max_width, vac, Zpos) #КОД СЮДА СТАВИТБ
 			f.write(s)
 			f.close()
 		except:
@@ -225,7 +229,6 @@ for cnt in contours:
 	contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE) #Нахождение контуров
 
 	for cnt in contours:
-
 		x1, y1, w1, h1 = cv2.boundingRect(cnt) #получение первых точек
 		Areab = cv2.contourArea(cnt)
 
@@ -254,12 +257,10 @@ for cnt in contours:
 
 				# вычисляем угол между самой длинной стороной прямоугольника и горизонтом
 				angle = 180.0 / math.pi * math.acos((reference[0] * usedEdge[0] + reference[1] * usedEdge[1]) / (cv2.norm(reference) * cv2.norm(usedEdge)))
-
 				cv2.putText(img, "%d" % int(angle), (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
 				cv2.drawContours(img,[box],0,(255,0,0),2)
 				cv2.circle(img, (cX, cY), 3, (255, 0, 255), -1)
 				cv2.rectangle (img, (x1, y1), (X2, Y2), (0,255,0), 2)
-
 	cv2.imshow('result', img)
 	cv2.imshow('BozhePomogiMne', thresh)
 
