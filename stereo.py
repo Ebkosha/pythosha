@@ -8,7 +8,7 @@ while(True):
     # Capture frame-by-frame
     ret, frame1 = cap1.read()
     ret, frame2 = cap2.read()
-q
+
     # Display the resulting frame
     cv2.imshow('Cam1',frame1)
     cv2.imshow('Cam2',frame2)
