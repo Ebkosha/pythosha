@@ -1,0 +1,2 @@
+xa = 'xaxa'
+print(xa)
