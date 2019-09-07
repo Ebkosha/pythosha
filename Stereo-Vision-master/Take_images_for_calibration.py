@@ -19,7 +19,7 @@ criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 # Call the two cameras
 CamR= cv2.VideoCapture(0)   # 0 -> Right Camera
-CamL= cv2.VideoCapture(2)   # 2 -> Left Camera
+CamL= cv2.VideoCapture(1)   # 2 -> Left Camera
 
 while True:
     retR, frameR= CamR.read()
@@ -46,7 +46,7 @@ while True:
 
         if cv2.waitKey(0) & 0xFF == ord('s'):   # Push "s" to save the images and "c" if you don't want to
             str_id_image= str(id_image)
-            print('Images ' + t + ' saved for right and left cameras')
+            print('Images ' + str(id_image) + ' saved for right and left cameras')
             cv2.imwrite('chessboard-R'+str_id_image+'.png',frameR) # Save the image in the file where this Programm is located
             cv2.imwrite('chessboard-L'+str_id_image+'.png',frameL)
             id_image=id_image+1
